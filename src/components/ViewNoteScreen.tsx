@@ -10,9 +10,10 @@ interface ViewNoteScreenProps {
   autoLockTimer: number;
   setAutoLockTimer: (time: number) => void;
   onTimerExpire: () => void;
+  darkMode?: boolean;
 }
 
-export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, setAutoLockTimer, onTimerExpire }: ViewNoteScreenProps) {
+export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, setAutoLockTimer, onTimerExpire, darkMode }: ViewNoteScreenProps) {
   useEffect(() => {
     const timer = setInterval(() => {
       setAutoLockTimer(autoLockTimer > 0 ? autoLockTimer - 1 : 0);
@@ -24,6 +25,18 @@ export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, 
   }, [autoLockTimer, setAutoLockTimer, onTimerExpire]);
 
   const getCategoryColor = (category: string) => {
+    if (darkMode) {
+      switch (category) {
+        case "Work":
+          return "bg-blue-900 text-blue-300";
+        case "Personal":
+          return "bg-green-900 text-green-300";
+        case "Password":
+          return "bg-purple-900 text-purple-300";
+        default:
+          return "bg-gray-700 text-gray-300";
+      }
+    }
     switch (category) {
       case "Work":
         return "bg-blue-100 text-blue-700";
@@ -55,9 +68,9 @@ export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, 
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm bg-opacity-95 flex flex-col h-[calc(100vh-2rem)] max-h-[800px]">
+    <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm bg-opacity-95 flex flex-col h-[90vh] md:h-[85vh] max-h-[900px]`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-5">
+      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 sm:px-6 py-4 sm:py-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
@@ -81,15 +94,15 @@ export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, 
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-6 space-y-4 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 p-4 sm:p-6 space-y-4 overflow-y-auto custom-scrollbar">
         <div>
           <div className="flex items-start gap-2 mb-3">
-            <h2 className="text-gray-800 flex-1 break-words">{note.title}</h2>
+            <h2 className={`${darkMode ? 'text-gray-100' : 'text-gray-800'} flex-1 break-words`}>{note.title}</h2>
             <span className={`px-3 py-1 rounded-full text-xs whitespace-nowrap ${getCategoryColor(note.category)}`}>
               {note.category}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-gray-500 text-sm">
+          <div className={`flex items-center gap-2 ${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm`}>
             <Calendar size={14} />
             <span>
               {note.createdAt.toLocaleDateString()} at {note.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -97,14 +110,14 @@ export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, 
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200 rounded-2xl p-5 min-h-[200px]">
-          <p className="text-gray-700 whitespace-pre-wrap break-words leading-relaxed">{note.content}</p>
+        <div className={`${darkMode ? 'bg-gradient-to-br from-gray-700 to-gray-600 border-gray-600' : 'bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200'} border-2 rounded-2xl p-5 min-h-[200px]`}>
+          <p className={`${darkMode ? 'text-gray-300' : 'text-gray-700'} whitespace-pre-wrap break-words leading-relaxed`}>{note.content}</p>
         </div>
 
         {/* Links Section */}
         {note.links && note.links.length > 0 && (
           <div>
-            <label className="block text-gray-700 mb-2 flex items-center gap-2">
+            <label className={`block ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-2 flex items-center gap-2`}>
               <LinkIcon size={16} className="text-indigo-500" />
               Links
             </label>
@@ -115,11 +128,11 @@ export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, 
                   href={link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-100 rounded-xl p-3 hover:from-blue-100 hover:to-cyan-100 transition-all group"
+                  className={`flex items-center gap-2 ${darkMode ? 'bg-gradient-to-br from-blue-900 to-cyan-900 border-blue-800 hover:from-blue-800 hover:to-cyan-800' : 'bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-100 hover:from-blue-100 hover:to-cyan-100'} border-2 rounded-xl p-3 transition-all group`}
                 >
-                  <LinkIcon size={16} className="text-blue-600 flex-shrink-0" />
-                  <span className="flex-1 text-blue-700 truncate text-sm">{link}</span>
-                  <ExternalLink size={16} className="text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <LinkIcon size={16} className={`${darkMode ? 'text-blue-400' : 'text-blue-600'} flex-shrink-0`} />
+                  <span className={`flex-1 ${darkMode ? 'text-blue-300' : 'text-blue-700'} truncate text-sm`}>{link}</span>
+                  <ExternalLink size={16} className={`${darkMode ? 'text-blue-400' : 'text-blue-600'} opacity-0 group-hover:opacity-100 transition-opacity`} />
                 </a>
               ))}
             </div>
@@ -129,7 +142,7 @@ export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, 
         {/* Attachments Section */}
         {note.attachments && note.attachments.length > 0 && (
           <div>
-            <label className="block text-gray-700 mb-2 flex items-center gap-2">
+            <label className={`block ${darkMode ? 'text-gray-300' : 'text-gray-700'} mb-2 flex items-center gap-2`}>
               <Paperclip size={16} className="text-indigo-500" />
               Attachments
             </label>
@@ -137,17 +150,17 @@ export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, 
               {note.attachments.map((attachment, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-2 bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-100 rounded-xl p-3 hover:from-purple-100 hover:to-pink-100 transition-all group"
+                  className={`flex items-center gap-2 ${darkMode ? 'bg-gradient-to-br from-purple-900 to-pink-900 border-purple-800 hover:from-purple-800 hover:to-pink-800' : 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-100 hover:from-purple-100 hover:to-pink-100'} border-2 rounded-xl p-3 transition-all group`}
                 >
-                  <div className="text-purple-600 flex-shrink-0">
+                  <div className={`${darkMode ? 'text-purple-400' : 'text-purple-600'} flex-shrink-0`}>
                     {getFileIcon(attachment.type)}
                   </div>
-                  <span className="flex-1 text-purple-700 truncate text-sm">{attachment.name}</span>
+                  <span className={`flex-1 ${darkMode ? 'text-purple-300' : 'text-purple-700'} truncate text-sm`}>{attachment.name}</span>
                   <button
                     onClick={() => handleDownloadAttachment(attachment)}
-                    className="p-1.5 bg-white rounded-lg hover:bg-purple-100 transition-all opacity-0 group-hover:opacity-100"
+                    className={`p-1.5 ${darkMode ? 'bg-gray-700 hover:bg-purple-900' : 'bg-white hover:bg-purple-100'} rounded-lg transition-all opacity-0 group-hover:opacity-100`}
                   >
-                    <Download size={16} className="text-purple-600" />
+                    <Download size={16} className={darkMode ? 'text-purple-400' : 'text-purple-600'} />
                   </button>
                 </div>
               ))}
@@ -155,24 +168,24 @@ export function ViewNoteScreen({ note, onBack, onEdit, onDelete, autoLockTimer, 
           </div>
         )}
 
-        <div className="flex items-center gap-2 bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-4">
-          <Shield className="text-green-600 flex-shrink-0" size={20} />
-          <p className="text-green-700 text-sm">Note decrypted only in memory</p>
+        <div className={`flex items-center gap-2 ${darkMode ? 'bg-gradient-to-br from-green-900 to-emerald-900 border-green-800' : 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-200'} border-2 rounded-xl p-4`}>
+          <Shield className={`${darkMode ? 'text-green-400' : 'text-green-600'} flex-shrink-0`} size={20} />
+          <p className={`${darkMode ? 'text-green-300' : 'text-green-700'} text-sm`}>Note decrypted only in memory</p>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="p-4 flex gap-3 border-t border-gray-100">
+      <div className={`p-4 flex gap-3 border-t ${darkMode ? 'border-gray-700' : 'border-gray-100'}`}>
         <button
           onClick={onEdit}
-          className="flex-1 bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 py-3.5 rounded-xl hover:from-indigo-200 hover:to-purple-200 transition-all flex items-center justify-center gap-2 border-2 border-indigo-200"
+          className={`flex-1 ${darkMode ? 'bg-gradient-to-br from-indigo-900 to-purple-900 text-indigo-300 hover:from-indigo-800 hover:to-purple-800 border-indigo-800' : 'bg-gradient-to-br from-indigo-100 to-purple-100 text-indigo-600 hover:from-indigo-200 hover:to-purple-200 border-indigo-200'} py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 border-2`}
         >
           <Edit size={20} />
           <span>Edit</span>
         </button>
         <button
           onClick={handleDelete}
-          className="flex-1 bg-gradient-to-br from-red-100 to-pink-100 text-red-600 py-3.5 rounded-xl hover:from-red-200 hover:to-pink-200 transition-all flex items-center justify-center gap-2 border-2 border-red-200"
+          className={`flex-1 ${darkMode ? 'bg-gradient-to-br from-red-900 to-pink-900 text-red-300 hover:from-red-800 hover:to-pink-800 border-red-800' : 'bg-gradient-to-br from-red-100 to-pink-100 text-red-600 hover:from-red-200 hover:to-pink-200 border-red-200'} py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 border-2`}
         >
           <Trash2 size={20} />
           <span>Delete</span>

@@ -30,9 +30,17 @@ export type Note = {
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("set-password");
+  const [previousScreen, setPreviousScreen] = useState<Screen | null>(null);
   const [hasPassword, setHasPassword] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [autoLockTimer, setAutoLockTimer] = useState(60);
+  const [autoLockDuration, setAutoLockDuration] = useState(60); // Default 60 seconds
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem("darkMode");
+    return saved ? JSON.parse(saved) : false;
+  });
+  const [masterPassword, setMasterPassword] = useState("");
+  const [customCategories, setCustomCategories] = useState<string[]>([]);
   const [notes, setNotes] = useState<Note[]>([
     {
       id: "1",
@@ -51,7 +59,7 @@ export default function App() {
     {
       id: "3",
       title: "Bank Password",
-      content: "Account: ****1234\nPassword: Secure#Pass123",
+      content: "Account: ****1234\\nPassword: Secure#Pass123",
       category: "Password",
       createdAt: new Date("2024-11-19"),
     },
@@ -60,19 +68,31 @@ export default function App() {
   const [showExportDialog, setShowExportDialog] = useState(false);
   const [showImportDialog, setShowImportDialog] = useState(false);
 
+  const navigateToScreen = (screen: Screen) => {
+    setPreviousScreen(currentScreen);
+    setCurrentScreen(screen);
+  };
+
   const handleSetPassword = (password: string) => {
+    setMasterPassword(password);
     setHasPassword(true);
     setCurrentScreen("unlock");
   };
 
   const handleUnlock = (password: string) => {
     setIsUnlocked(true);
-    setAutoLockTimer(60); // Reset timer on unlock
+    setAutoLockTimer(autoLockDuration); // Reset timer on unlock
     setCurrentScreen("home");
   };
 
   const handleLock = () => {
     setIsUnlocked(false);
+    setCurrentScreen("unlock");
+  };
+
+  const handleLogout = () => {
+    setIsUnlocked(false);
+    setAutoLockTimer(autoLockDuration);
     setCurrentScreen("unlock");
   };
 
@@ -90,7 +110,8 @@ export default function App() {
       createdAt: new Date(),
     };
     setNotes([newNote, ...notes]);
-    setCurrentScreen("home");
+    setAutoLockTimer(autoLockDuration); // Reset timer after saving
+    setCurrentScreen(previousScreen || "home");
   };
 
   const handleViewNote = (noteId: string) => {
@@ -110,25 +131,40 @@ export default function App() {
 
   const handleUpdateNote = (updatedNote: Note) => {
     setNotes(notes.map((note) => (note.id === updatedNote.id ? updatedNote : note)));
-    setCurrentScreen("home");
+    setAutoLockTimer(autoLockDuration); // Reset timer after saving
+    setCurrentScreen(previousScreen || "home");
+  };
+
+  const handleChangeMasterPassword = (oldPassword: string, newPassword: string) => {
+    if (oldPassword === masterPassword) {
+      setMasterPassword(newPassword);
+      return true;
+    }
+    return false;
+  };
+
+  const handleDarkModeToggle = (enabled: boolean) => {
+    setDarkMode(enabled);
+    localStorage.setItem("darkMode", JSON.stringify(enabled));
   };
 
   const selectedNote = selectedNoteId ? notes.find((n) => n.id === selectedNoteId) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <div className={`min-h-screen ${darkMode ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-indigo-50 via-white to-purple-50'} flex items-center justify-center p-4`}>
       <div className="w-full max-w-md">
         {currentScreen === "set-password" && (
-          <SetMasterPasswordScreen onContinue={handleSetPassword} />
+          <SetMasterPasswordScreen onContinue={handleSetPassword} darkMode={darkMode} />
         )}
         {currentScreen === "unlock" && (
-          <UnlockScreen onUnlock={handleUnlock} />
+          <UnlockScreen onUnlock={handleUnlock} darkMode={darkMode} />
         )}
         {currentScreen === "home" && (
           <HomeScreen
             notes={notes}
             onAddNote={() => {
               setSelectedNoteId(null);
+              setAutoLockTimer(120); // Set to 2 minutes when adding note
               setCurrentScreen("add-note");
             }}
             onViewNote={handleViewNote}
@@ -136,16 +172,23 @@ export default function App() {
             autoLockTimer={autoLockTimer}
             setAutoLockTimer={setAutoLockTimer}
             onTimerExpire={handleTimerExpire}
+            darkMode={darkMode}
           />
         )}
         {currentScreen === "add-note" && (
           <AddNoteScreen
             note={selectedNote || undefined}
             onSave={selectedNote ? handleUpdateNote : handleAddNote}
-            onBack={() => setCurrentScreen("home")}
+            onBack={() => {
+              setAutoLockTimer(autoLockDuration); // Reset timer when going back
+              setCurrentScreen(previousScreen || "home");
+            }}
             autoLockTimer={autoLockTimer}
             setAutoLockTimer={setAutoLockTimer}
             onTimerExpire={handleTimerExpire}
+            darkMode={darkMode}
+            customCategories={customCategories}
+            onAddCustomCategory={(category: string) => setCustomCategories([...customCategories, category])}
           />
         )}
         {currentScreen === "view-note" && selectedNote && (
@@ -157,6 +200,7 @@ export default function App() {
             autoLockTimer={autoLockTimer}
             setAutoLockTimer={setAutoLockTimer}
             onTimerExpire={handleTimerExpire}
+            darkMode={darkMode}
           />
         )}
         {currentScreen === "settings" && (
@@ -166,9 +210,21 @@ export default function App() {
             onImportBackup={() => setShowImportDialog(true)}
             onPrivacyPolicy={() => setCurrentScreen("privacy-policy")}
             onNavigate={setCurrentScreen}
+            onAddNote={() => {
+              setSelectedNoteId(null);
+              setAutoLockTimer(120); // Set to 2 minutes when adding note
+              setCurrentScreen("add-note");
+            }}
+            onLogout={handleLogout}
             autoLockTimer={autoLockTimer}
             setAutoLockTimer={setAutoLockTimer}
             onTimerExpire={handleTimerExpire}
+            autoLockDuration={autoLockDuration}
+            setAutoLockDuration={setAutoLockDuration}
+            darkMode={darkMode}
+            onDarkModeToggle={handleDarkModeToggle}
+            masterPassword={masterPassword}
+            onChangeMasterPassword={handleChangeMasterPassword}
           />
         )}
         {currentScreen === "privacy-policy" && (
@@ -178,6 +234,7 @@ export default function App() {
             autoLockTimer={autoLockTimer}
             setAutoLockTimer={setAutoLockTimer}
             onTimerExpire={handleTimerExpire}
+            darkMode={darkMode}
           />
         )}
       </div>

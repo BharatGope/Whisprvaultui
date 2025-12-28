@@ -5,9 +5,10 @@ interface BottomNavProps {
   currentScreen: Screen;
   onNavigate: (screen: Screen) => void;
   onAddNote?: () => void;
+  darkMode?: boolean;
 }
 
-export function BottomNav({ currentScreen, onNavigate, onAddNote }: BottomNavProps) {
+export function BottomNav({ currentScreen, onNavigate, onAddNote, darkMode }: BottomNavProps) {
   const navItems = [
     { id: "home" as Screen, icon: Home, label: "Home" },
     { id: "add" as const, icon: Plus, label: "Add" },
@@ -23,7 +24,7 @@ export function BottomNav({ currentScreen, onNavigate, onAddNote }: BottomNavPro
   };
 
   return (
-    <div className="bg-white border-t border-gray-200 px-4 py-3 safe-area-bottom">
+    <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-t px-4 py-3 safe-area-bottom`}>
       <div className="flex items-center justify-around max-w-md mx-auto">
         {navItems.map((item) => {
           const isActive = 
@@ -38,7 +39,9 @@ export function BottomNav({ currentScreen, onNavigate, onAddNote }: BottomNavPro
               className={`flex flex-col items-center gap-1 px-6 py-2 rounded-xl transition-all ${
                 isActive
                   ? "bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg scale-105"
-                  : "text-gray-500 hover:text-indigo-600 hover:bg-gray-50"
+                  : darkMode 
+                    ? "text-gray-400 hover:text-indigo-400 hover:bg-gray-700"
+                    : "text-gray-500 hover:text-indigo-600 hover:bg-gray-50"
               }`}
             >
               <Icon size={22} />
