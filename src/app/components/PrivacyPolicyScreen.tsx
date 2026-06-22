@@ -24,27 +24,27 @@ export function PrivacyPolicyScreen({ onBack, onNavigate, autoLockTimer, setAuto
   }, [autoLockTimer, setAutoLockTimer, onTimerExpire]);
 
   return (
-    <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm bg-opacity-95 flex flex-col h-[90vh] md:h-[85vh] max-h-[900px]`}>
+    <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl sm:rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm bg-opacity-95 flex flex-col h-full`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 sm:px-6 py-4 sm:py-5">
+      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-3 sm:px-6 py-3 sm:py-5 flex-shrink-0">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={onBack}
-              className="p-2 bg-white bg-opacity-20 rounded-xl hover:bg-opacity-30 transition-all"
+              className="p-1.5 sm:p-2 bg-white bg-opacity-20 rounded-lg sm:rounded-xl hover:bg-opacity-30 transition-all active:scale-95"
             >
-              <ArrowLeft className="text-black" size={20} />
+              <ArrowLeft className="text-black" size={18} />
             </button>
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-white bg-opacity-20 rounded-lg">
-                <Shield className="text-black" size={20} />
+              <div className="p-1.5 sm:p-2 bg-white bg-opacity-20 rounded-lg">
+                <Shield className="text-black" size={18} />
               </div>
-              <h1 className="text-white">Privacy Policy</h1>
+              <h1 className="text-white text-base sm:text-lg">Privacy Policy</h1>
             </div>
           </div>
-          <div className="flex items-center gap-2 bg-white bg-opacity-20 px-3 py-2 rounded-lg">
-            <Clock size={16} className="text-black" />
-            <span className="text-black text-sm">{autoLockTimer}s</span>
+          <div className="flex items-center gap-2 bg-white bg-opacity-20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
+            <Clock size={14} className="text-black" />
+            <span className="text-black text-xs sm:text-sm">{autoLockTimer}s</span>
           </div>
         </div>
       </div>

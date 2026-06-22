@@ -151,8 +151,8 @@ export default function App() {
   const selectedNote = selectedNoteId ? notes.find((n) => n.id === selectedNoteId) : null;
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-indigo-50 via-white to-purple-50'} flex items-center justify-center p-4`}>
-      <div className="w-full max-w-md">
+    <div className={`min-h-screen ${darkMode ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' : 'bg-gradient-to-br from-indigo-50 via-white to-purple-50'} flex items-center justify-center p-2 sm:p-4`}>
+      <div className="w-full max-w-md h-[100dvh] sm:h-auto sm:max-h-[95vh]">
         {currentScreen === "set-password" && (
           <SetMasterPasswordScreen onContinue={handleSetPassword} darkMode={darkMode} />
         )}

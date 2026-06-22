@@ -24,7 +24,7 @@ export function BottomNav({ currentScreen, onNavigate, onAddNote, darkMode }: Bo
   };
 
   return (
-    <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-t px-4 py-3 safe-area-bottom`}>
+    <div className={`${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-t px-2 sm:px-4 py-2 sm:py-3 safe-area-bottom flex-shrink-0`}>
       <div className="flex items-center justify-around max-w-md mx-auto">
         {navItems.map((item) => {
           const isActive = 
@@ -36,7 +36,7 @@ export function BottomNav({ currentScreen, onNavigate, onAddNote, darkMode }: Bo
             <button
               key={item.id}
               onClick={() => handleClick(item.id)}
-              className={`flex flex-col items-center gap-1 px-6 py-2 rounded-xl transition-all ${
+              className={`flex flex-col items-center gap-0.5 sm:gap-1 px-4 sm:px-6 py-2 rounded-lg sm:rounded-xl transition-all active:scale-95 min-w-[60px] min-h-[52px] ${
                 isActive
                   ? "bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg scale-105"
                   : darkMode 
@@ -44,7 +44,7 @@ export function BottomNav({ currentScreen, onNavigate, onAddNote, darkMode }: Bo
                     : "text-gray-500 hover:text-indigo-600 hover:bg-gray-50"
               }`}
             >
-              <Icon size={22} />
+              <Icon size={20} />
               <span className="text-xs">{item.label}</span>
             </button>
           );
