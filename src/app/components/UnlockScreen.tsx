@@ -32,8 +32,7 @@ export function UnlockScreen() {
     setIsUnlocked(true);
     setAutoLockTimer(autoLockDuration);
 
-    const from = searchParams.get("from") || "/home";
-    navigate(from, { replace: true });
+    navigate("/home", { replace: true });
   };
 
   return (
