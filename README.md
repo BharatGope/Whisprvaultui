@@ -1,11 +1,10 @@
 
-  # WhisprVault UI
+# WhisprVault
 
-  This is a code bundle for WhisprVault UI. The original project is available at https://www.figma.com/design/1M5SAEEByU2uCDy4gEXQHy/WhisprVault-UI.
+WhisprVault is a secure, privacy-focused notes and vault management application. It features end-to-end master password protection, customizable auto-lock timers, file attachments, and clean light and dark themes.
 
-  ## Running the code
+## Running the code
 
-  Run `npm i` to install the dependencies.
+Run `npm i` to install the dependencies.
 
-  Run `npm run dev` to start the development server.
-  
+Run `npm run dev` to start the development server.
