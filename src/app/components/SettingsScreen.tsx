@@ -14,7 +14,7 @@ export function SettingsScreen() {
     setShowExportDialog, setShowImportDialog,
   } = useAppContext();
   const navigate = useNavigate();
-  const autoLockTimer = useAutoLock();
+  const autoLock = useAutoLock();
 
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
   const [showTimerDialog, setShowTimerDialog] = useState(false);
@@ -55,6 +55,7 @@ export function SettingsScreen() {
   };
 
   const timerOptions = [
+    { value: 0, label: "Off" },
     { value: 30, label: "30 seconds" },
     { value: 60, label: "1 minute" },
     { value: 120, label: "2 minutes" },
@@ -75,7 +76,11 @@ export function SettingsScreen() {
           </div>
           <div className="flex items-center gap-2 bg-white bg-opacity-20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
             <Clock size={14} className="text-black" />
-            <span className="text-black text-xs sm:text-sm">{autoLockTimer}s</span>
+            {autoLock.display && (
+            <span className="text-black text-xs sm:text-sm">
+              {autoLock.display}
+            </span>
+          )}
           </div>
         </div>
       </div>
@@ -150,7 +155,7 @@ export function SettingsScreen() {
               <div className="flex-1 text-left min-w-0">
                 <p className={`${darkMode ? "text-gray-200" : "text-gray-800"} text-sm sm:text-base`}>Auto-Lock Timer</p>
                 <p className={`${darkMode ? "text-gray-400" : "text-gray-500"} text-xs truncate`}>
-                  Currently: {autoLockDuration >= 60 ? `${autoLockDuration / 60} minute${autoLockDuration > 60 ? "s" : ""}` : `${autoLockDuration} seconds`}
+                  Currently: {autoLockDuration === 0 ? "Off" : autoLockDuration >= 60 ? `${autoLockDuration / 60} minute${autoLockDuration > 60 ? "s" : ""}` : `${autoLockDuration} seconds`}
                 </p>
               </div>
               <ChevronRight className={`${darkMode ? "text-gray-500 group-hover:text-orange-400" : "text-gray-400 group-hover:text-orange-600"} flex-shrink-0`} size={18} />

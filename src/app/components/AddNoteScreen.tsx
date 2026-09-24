@@ -1,17 +1,14 @@
 import { useState, useRef } from "react";
-import { ArrowLeft, Save, FileText, Lock, Briefcase, User, KeyRound, Link as LinkIcon, Paperclip, X, File, Image as ImageIcon, Clock, Plus } from "lucide-react";
+import { ArrowLeft, Save, FileText, Lock, Briefcase, User, KeyRound, Link as LinkIcon, Paperclip, X, File, Image as ImageIcon, Plus } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import { useAppContext } from "../context/AppContext";
-import { useAutoLock } from "../hooks/useAutoLock";
 import type { Note } from "../types";
 
 export function AddNoteScreen() {
   const { notes, setNotes, darkMode, autoLockDuration, setAutoLockTimer, customCategories, setCustomCategories } = useAppContext();
   const navigate = useNavigate();
   const { id } = useParams<{ id?: string }>();
-  const autoLockTimer = useAutoLock();
-
-  const existingNote = id ? notes.find((n) => n.id === id) : undefined;
+const existingNote = id ? notes.find((n) => n.id === id) : undefined;
 
   const [title, setTitle] = useState(existingNote?.title || "");
   const [content, setContent] = useState(existingNote?.content || "");
@@ -108,10 +105,6 @@ export function AddNoteScreen() {
               </div>
               <h1 className="text-white text-base sm:text-lg">{existingNote ? "Edit Note" : "Add Note"}</h1>
             </div>
-          </div>
-          <div className="flex items-center gap-2 bg-white bg-opacity-20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
-            <Clock size={14} className="text-black" />
-            <span className="text-black text-xs sm:text-sm">{autoLockTimer}s</span>
           </div>
         </div>
       </div>
@@ -317,3 +310,4 @@ export function AddNoteScreen() {
     </div>
   );
 }
+

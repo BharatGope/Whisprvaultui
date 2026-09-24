@@ -18,6 +18,7 @@ interface AppContextType {
   setAutoLockTimer: (v: number) => void;
   autoLockDuration: number;
   setAutoLockDuration: (v: number) => void;
+  autoLockDisplay: string;
   showExportDialog: boolean;
   setShowExportDialog: (v: boolean) => void;
   showImportDialog: boolean;
@@ -68,6 +69,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   });
   const [autoLockTimer, setAutoLockTimer] = useState(60);
   const [autoLockDuration, setAutoLockDuration] = useState(60);
+  
+  const autoLockDisplay =
+  autoLockDuration === 0 ? "" : `${autoLockTimer}s`;
   const [showExportDialog, setShowExportDialog] = useState(false);
   const [showImportDialog, setShowImportDialog] = useState(false);
 
@@ -82,6 +86,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         darkMode, setDarkMode,
         autoLockTimer, setAutoLockTimer,
         autoLockDuration, setAutoLockDuration,
+        autoLockDisplay,
         showExportDialog, setShowExportDialog,
         showImportDialog, setShowImportDialog,
       }}

@@ -5,13 +5,13 @@ import { useAppContext } from "../context/AppContext";
 export function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { darkMode, setAutoLockTimer } = useAppContext();
+  const { darkMode, autoLockDuration, setAutoLockTimer } = useAppContext();
 
   const isHome = location.pathname === "/home";
   const isSettings = location.pathname.startsWith("/settings");
 
   const handleAddNote = () => {
-    setAutoLockTimer(120);
+    setAutoLockTimer(autoLockDuration);
     navigate("/note/new");
   };
 

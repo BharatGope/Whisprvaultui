@@ -7,7 +7,7 @@ export function ViewNoteScreen() {
   const { notes, setNotes, darkMode } = useAppContext();
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const autoLockTimer = useAutoLock();
+  const autoLock = useAutoLock();
 
   const note = notes.find((n) => n.id === id);
   if (!note) return <Navigate to="/home" replace />;
@@ -69,7 +69,9 @@ export function ViewNoteScreen() {
           </div>
           <div className="flex items-center gap-2 bg-white bg-opacity-20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
             <Clock size={14} className="text-black" />
-            <span className="text-black text-xs sm:text-sm">{autoLockTimer}s</span>
+            {autoLock.display && (
+              <span>{autoLock.display}</span>
+            )}
           </div>
         </div>
       </div>

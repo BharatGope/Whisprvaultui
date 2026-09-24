@@ -7,8 +7,7 @@ import { BottomNav } from "./BottomNav";
 export function PrivacyPolicyScreen() {
   const { darkMode } = useAppContext();
   const navigate = useNavigate();
-  const autoLockTimer = useAutoLock();
-
+  const autoLock = useAutoLock();
   return (
     <div className={`${darkMode ? "bg-gray-800" : "bg-white"} rounded-xl sm:rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm bg-opacity-95 flex flex-col h-full`}>
       {/* Header */}
@@ -30,7 +29,9 @@ export function PrivacyPolicyScreen() {
           </div>
           <div className="flex items-center gap-2 bg-white bg-opacity-20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
             <Clock size={14} className="text-black" />
-            <span className="text-black text-xs sm:text-sm">{autoLockTimer}s</span>
+            {autoLock.display && (
+              <span>{autoLock.display}</span>
+            )}
           </div>
         </div>
       </div>

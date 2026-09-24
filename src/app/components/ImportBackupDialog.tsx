@@ -77,7 +77,7 @@ export function ImportBackupDialog({ onClose }: ImportBackupDialogProps) {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Enter Master Password"
+                placeholder="Enter Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:outline-none focus:bg-white transition-all"
