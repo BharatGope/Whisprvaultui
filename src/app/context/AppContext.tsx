@@ -67,8 +67,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return false;
     }
   });
-  const [autoLockTimer, setAutoLockTimer] = useState(60);
-  const [autoLockDuration, setAutoLockDuration] = useState(60);
+  const [autoLockTimer, setAutoLockTimer] = useState(0);
+  const [autoLockDuration, setAutoLockDuration] = useState(0);
   
   const autoLockDisplay =
   autoLockDuration === 0 ? "" : `${autoLockTimer}s`;

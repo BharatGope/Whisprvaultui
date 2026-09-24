@@ -74,14 +74,14 @@ export function SettingsScreen() {
             </div>
             <h1 className="text-white text-base sm:text-lg">Settings</h1>
           </div>
-          <div className="flex items-center gap-2 bg-white bg-opacity-20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
-            <Clock size={14} className="text-black" />
-            {autoLock.display && (
-            <span className="text-black text-xs sm:text-sm">
-              {autoLock.display}
-            </span>
+          {autoLock.display && (
+            <div className="flex items-center gap-2 bg-white bg-opacity-20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
+              <Clock size={14} className="text-black" />
+              <span className="text-black text-xs sm:text-sm">
+                {autoLock.display}
+              </span>
+            </div>
           )}
-          </div>
         </div>
       </div>
 

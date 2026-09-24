@@ -37,12 +37,12 @@ export function HomeScreen() {
             </div>
             <h1 className="text-white text-base sm:text-lg">WhisprVault</h1>
           </div>
-          <div className="flex items-center gap-2 bg-white bg-opacity-20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
-            <Clock size={14} className="text-black" />
-            {autoLock.display && (
+          {autoLock.display && (
+            <div className="flex items-center gap-2 bg-white bg-opacity-20 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg">
+              <Clock size={14} className="text-black" />
               <span>{autoLock.display}</span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
